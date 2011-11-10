@@ -7,6 +7,7 @@ describe UsersController do
 
     before(:each) do
       @user = Factory(:user)
+      User.stub!(:find, @user.id).and_return(@user)
     end
 
     it "should be successful" do
