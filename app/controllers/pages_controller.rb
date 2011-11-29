@@ -14,6 +14,7 @@ class PagesController < ApplicationController
   def help
     @title = "Help"
   end
+end
   
   ## GET /Pages# GET /Pages
   ## GET /Pages.xml
@@ -96,4 +97,3 @@ class PagesController < ApplicationController
   #    format.xml  { head :ok }
   #  end
   #end
-end

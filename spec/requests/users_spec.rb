@@ -34,6 +34,7 @@ describe "Users" do
       end
     end
   end
+  
   describe "sign in/out" do
 
     describe "failure" do

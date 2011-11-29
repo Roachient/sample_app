@@ -33,7 +33,6 @@ describe User do
   it "should create a new instance given valid attributes" do
     User.create!(@attr)
   end
-
  
   it "should require a name" do
     no_name_user = User.new(@attr.merge(:name => ""))
@@ -44,7 +43,6 @@ describe User do
     no_email_user = User.new(@attr.merge(:email => ""))
     no_email_user.should_not be_valid
   end
-
 
   it "should reject names that are too long" do
     long_name = "a" * 51
@@ -105,9 +103,9 @@ describe User do
       hash = @attr.merge(:password => long, :password_confirmation => long)
       User.new(hash).should_not be_valid
     end
-    
   end
-    describe "password encryption" do
+  
+  describe "password encryption" do
 
     before(:each) do
       @user = User.create!(@attr)
@@ -116,9 +114,11 @@ describe User do
     it "should have an encrypted password attribute" do
       @user.should respond_to(:encrypted_password)
     end
-        it "should set the encrypted password" do
+    
+    it "should set the encrypted password" do
       @user.encrypted_password.should_not be_blank
-        end
+    end
+    
     describe "has_password? method" do
 
       it "should be true if the passwords match" do
@@ -129,6 +129,7 @@ describe User do
         @user.has_password?("invalid").should be_false
       end 
     end
+    
     describe "authenticate method" do
 
       it "should return nil on email/password mismatch" do
@@ -145,45 +146,26 @@ describe User do
         matching_user = User.authenticate(@attr[:email], @attr[:password])
         matching_user.should == @user
       end
-      
-      def User.authenticate(email, submitted_password)
-        user = find_by_email(email)
-        return nil  if user.nil?
-        return user if user.has_password?(submitted_password)
-      end
-      
-      def self.authenticate(email, submitted_password)
-        user = find_by_email(email)
-        return nil  if user.nil?
-        return user if user.has_password?(submitted_password)
-        return nil
-      end
-
-      def self.authenticate(email, submitted_password)
-        user = find_by_email(email)
-        if user.nil?
-          nil
-        elsif user.has_password?(submitted_password)
-          user
-        else
-          nil
-        end
-      end
-
-      def self.authenticate(email, submitted_password)
-        user = find_by_email(email)
-        if user.nil?
-          nil
-        elsif user.has_password?(submitted_password)
-          user
-        end
-      end
-      
-      def self.authenticate(email, submitted_password)
-        user = find_by_email(email)
-        user && user.has_password?(submitted_password) ? user : nil
-      end
-
     end
   end
+  
+  describe "admin attribute" do
+  
+      before(:each) do
+        @user = User.create!(@attr)
+      end
+  
+      it "should respond to admin" do
+        @user.should respond_to(:admin)
+      end
+  
+      it "should not be an admin by default" do
+        @user.should_not be_admin
+      end
+  
+      it "should be convertible to an admin" do
+        @user.toggle!(:admin)
+        @user.should be_admin
+      end
+    end
 end
